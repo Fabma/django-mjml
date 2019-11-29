@@ -5,6 +5,9 @@ import subprocess
 import tempfile
 from django.utils.encoding import force_str, force_bytes
 from . import settings as mjml_settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 _cache = {}
@@ -71,6 +74,7 @@ def _mjml_render_by_tcpserver(mjml_code):
             timeouts += 1
             continue
         except socket.error:
+            logger.exception("socket.error", exc_info=True)
             continue
         try:
             s.sendall(mjml_code_data)
